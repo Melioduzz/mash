@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+{%  block metadescription %}
+    {% if category %}
+        {{ category.description|truncatewords:155 }}
+    {% else %}
+        Welcome to SHOPP! where u can buy with a smile....
+    {% endif %}
+{% endblock %}
+{% block title %}
+    {% if category %}
+        {{ category.name }}  - SHOPP!
+    {% else %}
+        See our new collections -SHOPP!
+    {% endif %}
+{% endblock %}
+{% block content %}
+ {% if category %}
+    <div >
+        <div class="row my_row_class">
+            <div class="mx-auto">
+            <p><a href="{% url 'shop:allProdCat' %} Our Product Collections"</p>
+            </div>
+        </div>
+    </div>
+ {% endif %}
+<div class="mx-auto">
+    {% if category %}
+    <img class=my_image src="{{category.image.url}}" alt="{{category.name}}">
+</div>
+<br>
+<div>
+    <h1 class="text-center mt_title">{{category.name}}</h1>
+    <p class="text-justify">{{category.description}}</p>
+</div>
+    {% else %}
+<div>
+<img class="my_image my_image_padding" src="{% static 'img/banner.png' %}" alt="Our products">
+</div>
+<br>
+<div>
+    <h1 class="text-center my_title">OUR Products Collections</h1>
+    <p class="text-justify">Shopping is an activity in which a customer browses the available goods or services presented by one or more retailers with the potential intent to purchase a suitable selection of them. A typology of shopper types has been developed by scholars which identifies one group of shoppers as recreational shoppers, that is, those who enjoy shopping and view it as a leisure activity.</p>
+</div>
+    {% endif %}
+<div class="container">
+    <div class="row mx-auto">
+{% for product in products.object_list %}
+<div class="my_bottom_margin col-9 col-sm-12 col-sm-4 col-lg-4">
+    <div class="card text-center" style="min-width:18rem;">
+        <a href="{{product.get_url}}"><img class="card_image_top my_image" src="{{product.image.url}}" alt="{{product.name}}"></a>
+    <div class="card-body">
+        <h4>{{product.name}}</h4>
+        <p>{{product.price}}</p>
+    </div>
+    </div>
+</div>
+{% endfor %}
+    </div>
+    <div class="mx_auto">
+        {% if products.paginator.num_pages > 1 %}
+
+       <hr>
+        <div class="text-center">
+            {% for pg in products.paginator.page_range %}
+                <a href="?page={{pg}}" class="btn btn-light btn-sm{% if products.numbers == pg %} active {% endif %}">{{ pg }}</a>
+            {% endfor%}
+        </div>
+         {% endif %}
+    </div>
+    <br>
+</div>
+{% endblock %}

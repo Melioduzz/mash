@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Scrapping</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+      <form method="POST" action="/">
+      {% csrf_token %}
+  <div class="row m-5">
+    <div class="col-md-6">
+        <input class="form-control" type="text" name="page" placeholder="Enter link">
+    </div>
+    <div class="col-md-1">
+      <button class="btn btn-primary" type="submit">Submit</button>
+    </div>
+        <div class="col-md-5">
+      <button class="btn btn-warning" type="submit">Clear</button>
+    </div>
+  </div>
+      </form>
+</div>
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-4">
+      <table class="table table-striped table-dark  ">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">Link</th>
+    </tr>
+  </thead>
+    {% for i in data_values%}
+  <tbody>
+    <tr>
+
+      <td>{{i.id}}</td>
+      <td>{{i.Stringname}}</td>
+      <td>{{i.address}}</td>
+    </tr>
+  </tbody>
+    {% endfor %}
+</table>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+</body>
+</html>

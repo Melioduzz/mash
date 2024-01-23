@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register page</title>
+ <style>
+        table{
+
+        border:5px solid black;
+        background-color:#FFEBCD;
+        padding:10px;
+        }
+        input{
+        background-color:#A9A9A9;
+        }
+    </style>
+</head>
+<body>
+    <form  method="POST">
+        {% csrf_token %}
+        <table>
+            <tr><td align="center">USERNAME:</td>
+               <td> <input id="reg_uname" name="reg_uname" placeholder="enter user name " type="text"></td></tr>
+            <tr><td align="center">FIRST NAME:</td>
+               <td> <input id="reg_fname" name="reg_fname" placeholder="enter first name" type="text"></td></tr>
+            <tr><td align="center">LAST NAME:</td>
+               <td> <input id="reg_lname" name="reg_lname" placeholder="enter last name" type="text"></td></tr>
+            <tr><td align="center">EMAIL</td>
+               <td> <input id="reg_email" name="reg_email" placeholder="enter your email" type="email"></td></tr>
+            <tr><td align="center">PASSWORD:</td>
+               <td> <input id="reg_pass" name="reg_pass" placeholder="*****" type="password"></td></tr>
+            <tr><td align="center">CONFIRM PASSWORD:</td>
+               <td> <input id="reg_cpass" name="reg_cpass" placeholder="*****" type="password"></td></tr>
+            <tr>
+               <td  colspan="2" align="center"> <input type="submit"></td></tr>
+
+        </table>
+    </form>
+{% for msg in messages %}
+{{msg}}
+{% endfor %}
+
+</body>
+</html>
