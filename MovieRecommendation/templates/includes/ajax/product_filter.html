@@ -1,0 +1,45 @@
+{% load static %}
+
+{% for prod in products %}
+    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6">
+        <div class="product__item product__item-d">
+            <div class="product__thumb fix">
+                <div class="product-image w-img">
+                    <div class="card-h 100">
+                        <a href="{% url 'product_details'  prod.id %}">
+                            <img src="{{prod.poster.url}}" alt="product" style="height: 300px;overflow: hidden; ">
+                        </a>
+                    </div>
+                </div>
+                <div class="product-action">
+                    <a href="#" class="icon-box icon-box-1" data-bs-toggle="modal" data-bs-target="#productModalId-{{forloop.counter}}">
+                        <i class="fal fa-eye"></i>
+                        <i class="fal fa-eye"></i>
+                    </a>
+                    <a href="#" class="icon-box icon-box-1">
+                        <i class="fal fa-heart"></i>
+                        <i class="fal fa-heart"></i>
+                    </a>
+                    <a href="#" class="icon-box icon-box-1">
+                        <i class="fal fa-layer-group"></i>
+                        <i class="fal fa-layer-group"></i>
+                    </a>
+                </div>
+            </div>
+            <br>
+            <div class="product__content-3">
+                <h6><a href="{% url 'product_details'  prod.id %}">{{prod.title}}</a></h6>
+                <div class="rating mb-5">
+           <p style="font-size:20px;color:orange;font-weight: bolder; margin-bottom: 10px;"> {{prod.avg_rating}} * </p>&nbsp; <p style="font-size:20px;color:grey;font-weight: bolder; margin-bottom: 10px;"> rating </p>
+
+                    <span>(01 review)</span>
+                </div>
+                <div class="price mb-10">
+                    {% for cat in prod.categories.all %}
+                        <span>{{ cat.name }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}

@@ -1,0 +1,138 @@
+
+
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+
+    #regibutton:disabled{
+    background-color:rgba(128, 128,128, 0.116);
+    }
+
+</style>
+
+        <!-- page-banner-area-start -->
+        <div class="page-banner-area page-banner-height-2" data-background="{% static 'assets/img/banner/page-banner-4.jpg' %}">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="page-banner-content text-center">
+                            <h4 class="breadcrumb-title">My account</h4>
+                            <div class="breadcrumb-two">
+                                <nav>
+                                   <nav class="breadcrumb-trail breadcrumbs">
+                                      <ul class="breadcrumb-menu">
+                                         <li class="breadcrumb-trail">
+                                            <a href="index.html"><span>Home</span></a>
+                                         </li>
+                                         <li class="trail-item">
+                                            <span>My account</span>
+                                         </li>
+                                      </ul>
+                                   </nav>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- page-banner-area-end -->
+
+        <!-- account-area-start -->
+        <div class="account-area mt-70 mb-70">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 mt-70 mb-70 ">
+                        <div class="basic-login mb-50">
+                            <h5>Login</h5>
+                            {% if error_message %}
+                         <p style="color:red;"> * {{ error_message }}</p>
+                                 {% endif %}
+                            <form action="#" method="post" novalidate>
+    {% csrf_token %}
+    {% if form.non_fields_errors %}
+        {% for error in form.non_fields_errors %}
+            <p>{{error}}</p>
+        {% endfor %}
+    {% endif %}
+    {% for fm in form %}
+    {{fm.label_tag}} {{fm}} {{fm.errors|striptags}} <br> <br>
+    {% endfor %}
+<input type="submit" value="submit">
+</form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- account-area-end -->
+
+
+
+
+{% endblock %}
+
+{% block js %}
+<script>
+
+    let fetchData = async (username, field) => {
+        let fullUrl = `/user_validate/${username}/${field}`; // Added a forward slash at the beginning
+        let res = await fetch(fullUrl);
+        let data = await res.json();
+        return data;
+    };
+
+    let usernameInput = document.getElementById("username");
+    let userOutput = document.getElementById("user");
+
+    usernameInput.addEventListener("input", async (e) => {
+        let username = e.target.value;
+        let data = await fetchData(username, "username");
+        if (data.status != 'success'){
+            regibutton.disabled =true
+        userwarn.innerHTML = data.message;
+        }
+        else{
+            regibutton.disabled = false
+            userwarn.innerHTML = data.message;
+          }
+    });
+
+        email_id.addEventListener("input", async (e) => {
+        let email = e.target.value;
+        let data = await fetchData(email, "email");
+        if (data.status != 'success'){
+            regibutton.disabled =true
+            emailwarn.innerHTML = data.message;
+        }
+        else{
+            regibutton.disabled = false
+            emailwarn.innerHTML = data.message;
+        }
+
+    });
+
+    cpass.addEventListener("input", (e) => {
+    let confirm = e.target.value;
+    let password = document.getElementById("userpass").value;
+    let cpasswarn = document.getElementById("cpasswarn"); // Assuming cpasswarn is the id of the warning element
+    if (password != confirm) {
+        regibutton.disabled =true
+        cpasswarn.innerHTML = "Password does not match!";
+    }
+    else {
+        regibutton.disabled =false
+        cpasswarn.innerHTML = "";
+    }
+});
+
+
+</script>
+
+
+{% endblock %}
+
+

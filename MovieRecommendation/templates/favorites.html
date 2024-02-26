@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+<div class="container">
+<div class="row mx-auto">
+ <div class="row g-0" id="product-container">
+
+
+
+                                                        {% for f in fav %}
+
+                                                    {% if user.id == f.user %}
+                                                        {% for prod in products %}
+                                                            {% if prod.id == f.product %}
+
+
+
+
+                                        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6">
+
+
+                                            <div class="product__item product__item-d">
+                                                <div class="product__thumb fix">
+                                                    <div class="product-image w-img">
+                                                        <div class="card-h 100">
+                                                        <a href="{% url 'product_details'  prod.id %}">
+                                                            <img src="{{prod.poster.url}}" alt="product" style="height: 300px;overflow: hidden; " >
+                                                        </a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="product-action">
+                                                        <a href="#" class="icon-box icon-box-1" data-bs-toggle="modal" data-bs-target="#productModalId-{{forloop.counter}}">
+                                                            <i class="fal fa-eye"></i>
+                                                            <i class="fal fa-eye"></i>
+                                                        </a>
+                                                        <a href="#" class="icon-box icon-box-1">
+                                                            <i class="fal fa-heart"></i>
+                                                            <i class="fal fa-heart"></i>
+                                                        </a>
+                                                        <a href="#" class="icon-box icon-box-1">
+                                                            <i class="fal fa-layer-group"></i>
+                                                            <i class="fal fa-layer-group"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="product__content-3">
+                                                    <h6><a href="{% url 'product_details'  prod.id %}">{{prod.title}}</a></h6>
+                                                    <div class="rating mb-5">
+                                                       <p style="font-size:20px;color:orange;font-weight: bolder; margin-bottom: 10px;"> {{prod.avg_rating}} * </p>&nbsp; <p style="font-size:20px;color:grey;font-weight: bolder; margin-bottom: 10px;"> rating </p>
+
+                                                        <span>(01 review)</span>
+                                                    </div>
+                                                    <div class="price mb-10">
+                                                        {% for cat in prod.categories.all %}
+                                                        <span>{{ cat.name }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                    <div>
+                                                        <form action="{% url 'delete_favorite' %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="fav_id" value="{{ f.id }}">
+    <button type="submit" style="margin-top:30px;margin-left:30px;width:250px;background-color: #DE1168;box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);border-radius: 8px;" class="tp-in-btn w-40">Remove </button>
+</form>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                            </div>
+
+                                            {% endif %}
+                                            {% endfor %}
+                                            {% endif %}
+                                        {% endfor %}
+
+                                    </div>
+                            </div>
+                        </div>
+                            <div class="mx_auto">
+        {% if products.paginator.num_pages > 1 %}
+
+       <hr>
+        <div class="text-center">
+            {% for pg in products.paginator.page_range %}
+                <a href="?page={{pg}}" class="btn btn-light btn-sm{% if products.numbers == pg %} active {% endif %}">{{ pg }}</a>
+            {% endfor%}
+        </div>
+         {% endif %}
+    </div>
+    <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+</div>
+
+
+<!-- shop modal start &ndash;&gt;-->
+    {% for prod in products %}
+        <div class="modal fade" id="productModalId-{{forloop.counter}}" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered product__modal" role="document">
+                <div class="modal-content">
+                    <div class="product__modal-wrapper p-relative">
+                        <div class="product__modal-close p-absolute">
+                            <button data-bs-dismiss="modal"><i class="fal fa-times"></i></button>
+                        </div>
+                        <div class="product__modal-inner">
+                            <div class="row">
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="product__modal-box">
+                                    <div class="tab-content" id="modalTabContent">
+                                        <div class="tab-pane fade show active" id="nav-first" role="tabpanel" aria-labelledby="nav-first-tab">
+                                            <div class="product__modal-img w-img">
+                                                <img src="{{ prod.poster.url }} " alt="" style="height: 380px;overflow: hidden; ">
+                                            </div>
+                                        </div>
+                                        {% for img in prod.additional_image_set.all %}
+                                        <div class="tab-pane fade" id="nav-{{img.id}}" role="tabpanel" aria-labelledby="nav-{{img.id}}-tab">
+                                            <div class="product__modal-img w-img">
+                                                <img src="{{ img.image}}" alt="" style="height: 380px;overflow: hidden; ">
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                        </div>
+                                    <br><br>
+                                    <ul class="nav nav-tabs" id="modalTab" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link active" id="nav-first-tab" data-bs-toggle="tab" data-bs-target="#nav-first" type="button" role="tab" aria-controls="nav-first" aria-selected="true">
+                                                <img src="{{ prod.poster.url }}" alt="" style="height: 50px;overflow: hidden; ">
+                                            </button>
+                                        </li>
+                                        {% for img in prod.additional_image_set.all %}
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="nav-{{img.id}}-tab" data-bs-toggle="tab" data-bs-target="#nav-{{img.id}}" type="button" role="tab" aria-controls="nav-{{img.id}}" aria-selected="false">
+                                            <img src="{{ img.image }}" alt="" style="height: 50px;overflow: hidden; ">
+                                            </button>
+                                        </li>
+                                        {% endfor %}
+                                        </ul>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="product__modal-content">
+                                    <h4><a href="{% url 'product_details'  prod.id %}">{{prod.title}}</a></h4>
+                                    <div class="product__review d-sm-flex">
+                                        <div class="rating rating__shop mb-10 mr-30">
+                                   <p style="font-size:20px;color:orange;font-weight: bolder; margin-bottom: 10px;"> {{prod.avg_rating}} * </p>&nbsp; <p style="font-size:20px;color:grey;font-weight: bolder; margin-bottom: 10px;"> rating </p>
+
+                                        </div>
+                                        <div class="product__add-review mb-15">
+                                        <span>01 review</span>
+                                        </div>
+                                    </div>
+                                    <div class="product__price">
+                                        <span>{{prod.release_date}} </span>
+                                    </div>
+                                    <div class="product__modal-des mt-20 mb-15">
+                                        <h3>Actors</h3>
+                                        <ul>
+                                            <li>{{prod.actors|truncatewords_html:10}}</li>
+                                        </ul>
+                                          <h3>Actors</h3>
+                                        <ul>
+                                            <li>{{ prod.description|safe|striptags|truncatewords_html:50 }}</li>
+                                        </ul>
+
+                                        </div>
+
+
+                                    </div>
+                                    <div class="product__modal-form">
+                                        <form action="#">
+                                        <div class="pro-quan-area d-lg-flex align-items-center">
+                                            <div class="pro-cart-btn mb-25">
+                                                <button class="cart-btn" type="submit">details</button>
+                                            </div>
+                                        </div>
+                                        </form>
+                                    </div>
+
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <!-- shop modal end -->
+
+
+
+
+{% endblock %}
+
+
+
+
+
+
+

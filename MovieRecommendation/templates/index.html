@@ -1,0 +1,252 @@
+
+
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+
+
+
+    <!-- offcanvas area start -->
+    <div class="offcanvas__area">
+        <div class="offcanvas__wrapper">
+        <div class="offcanvas__close">
+            <button class="offcanvas__close-btn" id="offcanvas__close-btn">
+                <i class="fal fa-times"></i>
+            </button>
+        </div>
+        <div class="offcanvas__content">
+            <div class="offcanvas__logo mb-40">
+                <a href="">
+                <img src="{% static 'assets/img/logo/logo-white.png' %}" alt="logo">
+                </a>
+            </div>
+            <div class="offcanvas__search mb-25">
+                <form action="#">
+                    <input type="text" placeholder="What are you searching for?">
+                    <button type="submit" ><i class="far fa-search"></i></button>
+                </form>
+            </div>
+            <div class="mobile-menu fix"></div>
+            <div class="offcanvas__action">
+
+            </div>
+        </div>
+        </div>
+    </div>
+    <!-- offcanvas area end -->
+    <div class="body-overlay"></div>
+    <!-- offcanvas area end -->
+    <main>
+        <!-- slider-area-start -->
+
+        <div class="slider-area">
+            <div class="swiper-container slider__active">
+                <div class="slider-wrapper swiper-wrapper">
+                    {% for ban in banner %}
+                    <div class="single-slider swiper-slide slider-height d-flex align-items-center" data-background="media/{{ban.image}}">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-xl-5">
+                                    <div class="slider-content">
+                                        <h5 data-animation="fadeInLeft" data-delay="1.7s" class="pt-15 slider-title pb-5"> <br>
+                                            {{ban.title}}</h5>
+                                        <div class="slider-bottom-btn mt-75">
+                                            <a data-animation="fadeInUp" data-delay="1.15s" href="{% url 'LogIn' %}" class="st-btn-b b-radius"> Login now !</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- /single-slider -->
+                    <div class="main-slider-paginations"></div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <!-- slider-area-end -->
+
+        <!-- features__area-start -->
+
+        <!-- features__area-end -->
+
+        <!-- banner__area-start -->
+
+        <!-- banner__area-end -->
+    </main>
+<br><br><br><br><br>
+
+
+ <!-- topsell__area-start -->
+        <section class="topsell__area-1 pt-15">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="section__head d-flex justify-content-between mb-10">
+                            <div class="section__title">
+                                <h5 class="st-titile-d">Recommendations for you ...</h5><br><br>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="product-bs-slider">
+                        <div class="product-slider swiper-container">
+                            <div class="swiper-wrapper">
+                                {% for prod in products %}
+                                <div class="product__item swiper-slide ">
+                                    <div class="product__thumb fix ">
+                                        <div class="card-h 100">
+                                        <div class="product-image w-img ">
+                                            <a href="">
+                                                <img src="media/{{prod.poster}}" alt="product" style="height: 300px;overflow: hidden; ">
+<!--                                                <style>-->
+<!--    .product__thumb .product-image {-->
+<!--        height: 300px; /* Set the desired height for the product images */-->
+<!--        overflow: hidden; /* Hide any overflow to ensure consistent height */-->
+<!--    }-->
+
+<!--    .product__thumb .product-image img {-->
+<!--        height: 100%; /* Make the image fill its container */-->
+<!--        width: auto; /* Allow the width to adjust proportionally */-->
+<!--    }-->
+<!--</style>-->
+                                            </a>
+                                        </div>
+                                            </div><br>
+                                        <div class="product__offer">
+                                        <span class="discount">-For you ...</span>
+                                        </div>
+                                        <div class="product-action">
+                                            <a href="#" class="icon-box icon-box-1" data-bs-toggle="modal" data-bs-target="#productModalId-{{forloop.counter}}">
+                                                <i class="fal fa-eye"></i>
+                                                <i class="fal fa-eye"></i>
+
+
+                                        </div>
+                                    </div>
+                                    <div class="product__content">
+                                        <h6><a href="}">{{prod.title | truncatechars:50}}</a></h6>
+                                        <div class="rating mb-5">
+   <p style="font-size:20px;color:orange;font-weight: bolder; margin-bottom: 10px;"> {{products.avg_rating}} * </p>&nbsp; <p style="font-size:20px;color:grey;font-weight: bolder; margin-bottom: 10px;"> rating </p> <p style="font-size:20px;color:orange;font-weight: bolder; margin-bottom: 10px;"> {{products.avg_rating}} * </p>&nbsp; <p style="font-size:20px;color:grey;font-weight: bolder; margin-bottom: 10px;"> rating </p>
+
+                                        </div>
+                                        <div class="price mb-10">
+                                          {% for cat in prod.categories.all %}
+                                                        <span>{{ cat.name | truncatewords_html:6}}</span>
+                                                        {% endfor %}
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                {% endfor %}
+
+                            </div>
+                        </div>
+                        <!-- If we need navigation buttons -->
+                        <div class="bs-button bs-button-prev"><i class="fal fa-chevron-left"></i></div>
+                        <div class="bs-button bs-button-next"><i class="fal fa-chevron-right"></i></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- topsell__area-end -->
+<br><br><br><br><br><br>
+
+<!-- shop modal start -->
+    {% for prod in products %}
+        <div class="modal fade" id="productModalId-{{forloop.counter}}" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered product__modal" role="document">
+                <div class="modal-content">
+                    <div class="product__modal-wrapper p-relative">
+                        <div class="product__modal-close p-absolute">
+                            <button data-bs-dismiss="modal"><i class="fal fa-times"></i></button>
+                        </div>
+                        <div class="product__modal-inner">
+                            <div class="row">
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="product__modal-box">
+                                    <div class="tab-content" id="modalTabContent">
+                                        <div class="tab-pane fade show active" id="nav-first" role="tabpanel" aria-labelledby="nav-first-tab">
+                                            <div class="product__modal-img w-img">
+                                                <img src="{{ prod.poster.url }} " alt="" style="height: 380px;overflow: hidden; ">
+                                            </div>
+                                        </div>
+                                        {% for img in prod.additional_image_set.all %}
+                                        <div class="tab-pane fade" id="nav-{{img.id}}" role="tabpanel" aria-labelledby="nav-{{img.id}}-tab">
+                                            <div class="product__modal-img w-img">
+                                                <img src="{{ img.image}}" alt="" style="height: 380px;overflow: hidden; ">
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                        </div>
+                                    <br><br>
+                                    <ul class="nav nav-tabs" id="modalTab" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link active" id="nav-first-tab" data-bs-toggle="tab" data-bs-target="#nav-first" type="button" role="tab" aria-controls="nav-first" aria-selected="true">
+                                                <img src="{{ prod.poster.url }}" alt="" style="height: 50px;overflow: hidden; ">
+                                            </button>
+                                        </li>
+                                        {% for img in prod.additional_image_set.all %}
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="nav-{{img.id}}-tab" data-bs-toggle="tab" data-bs-target="#nav-{{img.id}}" type="button" role="tab" aria-controls="nav-{{img.id}}" aria-selected="false">
+                                            <img src="{{ img.image }}" alt="" style="height: 50px;overflow: hidden; ">
+                                            </button>
+                                        </li>
+                                        {% endfor %}
+                                        </ul>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="product__modal-content">
+                                    <h4><a href="">{{prod.title}}</a></h4>
+                                    <div class="product__review d-sm-flex">
+                                        <div class="rating rating__shop mb-10 mr-30">
+                                      <p style="font-size:20px;color:orange;font-weight: bolder; margin-bottom: 10px;"> {{prod.avg_rating}} * </p>&nbsp; <p style="font-size:20px;color:grey;font-weight: bolder; margin-bottom: 10px;"> rating </p>
+
+                                        </div>
+                                        <div class="product__add-review mb-15">
+                                        <span>01 review</span>
+                                        </div>
+                                    </div>
+                                    <div class="product__price">
+                                        <span>{{prod.release_date}} </span><br>
+                                        {% for cat in prod.categories.all %}
+                                        <span>{{ cat.name | truncatewords_html:6}}</span>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="product__modal-des mt-20 mb-15">
+                                        <h3>Actors</h3>
+                                        <ul>
+                                            <li>{{prod.actors|truncatewords_html:10}}</li>
+                                        </ul>
+                                          <h3>Actors</h3>
+                                        <ul>
+                                            <li>{{ prod.description|safe|striptags|truncatewords_html:50 }}</li>
+                                        </ul>
+
+                                        </div>
+
+
+                                    </div>
+                                    <div class="product__modal-form">
+                                        <form action="#">
+                                        <div class="pro-quan-area d-lg-flex align-items-center">
+
+                                        </div>
+                                        </form>
+                                    </div>
+
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <!-- shop modal end -->
+
+{% endblock %}

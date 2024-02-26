@@ -1,0 +1,423 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<!--####################################################################################-->
+<link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+{% if request.user == user_to_hide_form %}
+  <style>
+    .container form {
+      display: none;
+    }
+  </style>
+{% endif %}
+<style>
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+{
+  display: grid;
+  height: 100%;
+  place-items: center;
+  text-align: center;
+  background: #000;
+}
+{
+  position: relative;
+  width: 400px;
+  background: #111;
+  padding: 20px 30px;
+  border: 1px solid #444;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.container .post{
+  display: none;
+}
+.container .text{
+  font-size: 25px;
+  color: #666;
+  font-weight: 500;
+}
+.container .edit{
+  position: absolute;
+  right: 10px;
+  top: 5px;
+  font-size: 16px;
+  color: #666;
+  font-weight: 500;
+  cursor: pointer;
+}
+.container .edit:hover{
+  text-decoration: underline;
+}
+.container .star-widget input{
+  display: none;
+}
+.star-widget label{
+  font-size: 40px;
+  color: #444;
+  padding: 10px;
+  float: right;
+  transition: all 0.2s ease;
+}
+input:not(:checked) ~ label:hover,
+input:not(:checked) ~ label:hover ~ label{
+  color: #fd4;
+}
+input:checked ~ label{
+  color: #fd4;
+}
+input#rate-5:checked ~ label{
+  color: #fe7;
+  text-shadow: 0 0 20px #952;
+}
+#rate-1:checked ~ form header:before{
+  content: "I just hate it ";
+}
+#rate-2:checked ~ form header:before{
+  content: "I don't like it ";
+}
+#rate-3:checked ~ form header:before{
+  content: "It is awesome ";
+}
+#rate-4:checked ~ form header:before{
+  content: "I just like it ";
+}
+#rate-5:checked ~ form header:before{
+  content: "I just love it ";
+}
+.container form{
+  display: ;
+}
+input:checked ~ form{
+  display: block;
+}
+form header{
+  width: 100%;
+  font-size: 25px;
+  color: #fe7;
+  font-weight: 500;
+  margin: 5px 0 20px 0;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+form .textarea{
+  height: 100px;
+  width: 100%;
+  overflow: hidden;
+}
+form .textarea textarea{
+  height: 100%;
+  width: 100%;
+  outline: none;
+  color: #eee;
+  border: 1px solid #333;
+  background: #222;
+  padding: 10px;
+  font-size: 17px;
+  resize: none;
+}
+.textarea textarea:focus{
+  border-color: #444;
+}
+form .btn{
+  height: 45px;
+  width: 100%;
+  margin: 15px 0;
+}
+form .btn button{
+  height: 100%;
+  width: 100%;
+  border: 1px solid #444;
+  outline: none;
+  background: #222;
+  color: #999;
+  font-size: 17px;
+  font-weight: 500;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+form .btn button:hover{
+  background: #1b1b1b;
+}
+</style>
+
+
+
+<!--####################################################################################-->
+
+
+
+<!-- breadcrumb__area-start -->
+<section class="breadcrumb__area box-plr-75" xmlns="http://www.w3.org/1999/html">
+    <div class="container">
+        <div class="row">
+            <div class="col-xxl-12">
+                <div class="breadcrumb__wrapper">
+                    <nav aria-label="breadcrumb">
+
+                    </nav>
+                    <br><br><br><br><br><br><br>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- breadcrumb__area-end -->
+
+<!-- product-details-start -->
+<div class="product-details">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-6">
+                <div class="product__details-nav d-sm-flex align-items-start">
+                    <ul class="nav nav-tabs flex-sm-column justify-content-between" id="productThumbTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="thumbOne-tab" data-bs-toggle="tab" data-bs-target="#thumbOne" type="button" role="tab" aria-controls="thumbOne" aria-selected="true">
+                                <img src="{{ products.poster.url }}" alt="" style="height: 50px; overflow: hidden;">
+                            </button>
+                        </li>
+                        {% for img in products.additional_image_set.all %}
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="thumb-{{ img.id }}-tab" data-bs-toggle="tab" data-bs-target="#thumb-{{ img.id }}" type="button" role="tab" aria-controls="thumb-{{ img.id }}" aria-selected="false">
+                                <img src="{{ img.image }}" alt="" style="height: 50px; overflow: hidden;">
+                            </button>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <div class="product__details-thumb">
+                        <div class="tab-content" id="productThumbContent">
+                            <div style="margin-left:70px" class="tab-pane fade show active" id="thumbOne" role="tabpanel" aria-labelledby="thumbOne-tab">
+                                <div class="product__details-nav-thumb w-img">
+                                    <img src="{{ products.poster.url }}" alt="" style="height: 500px; overflow: hidden;">
+                                </div>
+                            </div>
+                            {% for img in products.additional_image_set.all %}
+                            <div style="margin-left:70px" class="tab-pane fade" id="thumb-{{ img.id }}" role="tabpanel" aria-labelledby="thumb-{{ img.id }}-tab">
+                                <div class="product__details-nav-thumb w-img">
+                                    <img src="{{ img.image }}" alt="" style="height: 500px; overflow: hidden;">
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <div class="product__details-content">
+                    <p style="font-size:50px;color:orange;font-weight: bolder; margin-bottom: 10px;">{{products.title}}</p><br><br><br><br>
+
+                    <div class="pd-rating mb-10">
+ <p style="font-size:20px;color:orange;font-weight: bolder; margin-bottom: 10px;"> {{products.avg_rating}} * </p>&nbsp; <p style="font-size:20px;color:grey;font-weight: bolder; margin-bottom: 10px;"> rating </p>
+
+
+                    </div>
+                    <div class="price mb-10">
+                        <span>Released Date: {{products.release_date}}</span>
+                    </div>
+                    <div class="features-des mb-20 mt-10">
+                        <ul>
+                            <li>
+                                <a href="product-details.html"><i class="fas fa-circle"></i><h3><strong>Genres:</strong></h3> </a>
+                                {% for cat in products.categories.all %}
+                                    {{ cat.name }}
+                                {% endfor %}
+                            </li>
+                            <li>
+                                <a href="product-details.html"><i class="fas fa-circle"></i><h3><strong>Actors:</strong></h3> </a>
+                                {{ products.actors|truncatechars:500 }}
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="cart-option mb-15">
+                        <a href="{{products.youtube}}" class="cart-btn" style="margin-right: 25px;width:130px;"> Trailer </a>
+                        <a href="{{products.download}}" class="cart-btn"> Download </a><br><br>
+                    </div>
+
+                    <div class="details-meta">
+                        <div class="d-meta-left">
+                            <div class="dm-item mr-20">
+                                <form action="{% url 'favorites'  %}" method="post">
+                                    {% csrf_token %}
+
+                                    <input type="text" name="fav_id" value="{{products.id}}" hidden>
+                                    <button type="submit"  style="margin-left:20px;width:250px;background-color: #DE1168;box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);border-radius: 8px;" class="tp-in-btn w-40"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-balloon-heart" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="m8 2.42-.717-.737c-1.13-1.161-3.243-.777-4.01.72-.35.685-.451 1.707.236 3.062C4.16 6.753 5.52 8.32 8 10.042c2.479-1.723 3.839-3.29 4.491-4.577.687-1.355.587-2.377.236-3.061-.767-1.498-2.88-1.882-4.01-.721zm-.49 8.5c-10.78-7.44-3-13.155.359-10.063q.068.062.132.129.065-.067.132-.129c3.36-3.092 11.137 2.624.357 10.063l.235.468a.25.25 0 1 1-.448.224l-.008-.017c.008.11.02.202.037.29.054.27.161.488.419 1.003.288.578.235 1.15.076 1.629-.157.469-.422.867-.588 1.115l-.004.007a.25.25 0 1 1-.416-.278c.168-.252.4-.6.533-1.003.133-.396.163-.824-.049-1.246l-.013-.028c-.24-.48-.38-.758-.448-1.102a3 3 0 0 1-.052-.45l-.04.08a.25.25 0 1 1-.447-.224l.235-.468ZM6.013 2.06c-.649-.18-1.483.083-1.85.798-.131.258-.245.689-.08 1.335.063.244.414.198.487-.043.21-.697.627-1.447 1.359-1.692.217-.073.304-.337.084-.398"/>
+</svg> Add to Favorites</button>
+
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- product-details-end -->
+
+<!-- product-details-des-start -->
+<div class="product-details-des mt-40 mb-60">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="product__details-des-tab">
+                    <ul class="nav nav-tabs" id="productDesTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="des-tab" data-bs-toggle="tab" data-bs-target="#des" type="button" role="tab" aria-controls="des" aria-selected="true">Description </button>
+                        </li>
+
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="review-tab" data-bs-toggle="tab" data-bs-target="#review" type="button" role="tab" aria-controls="review" aria-selected="false">Reviews (1) </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="tab-content" id="prodductDesTaContent">
+            <br><br>
+            <div class="tab-pane fade active show" id="des" role="tabpanel" aria-labelledby="des-tab">
+                {{products.description|safe}}
+            </div>
+
+            <div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
+                <div class="product__details-review">
+                    <div class="row">
+                        <div class="col-xl-6">
+
+
+
+
+
+
+<!--                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^-->
+
+
+
+
+<!--                            ###########################################################-->
+
+
+
+
+
+
+<br><br><br><br>
+                            <h3>Add your rating </h3><br><br><br><br>
+
+    <div class="container">
+      <div class="post">
+
+      </div>
+      <div class="star-widget">
+
+
+                  <form action="{% url 'rating' %}" method="post">
+                       {% csrf_token %}
+                      <input type="text" name="rate_id" value="{{products.id}}" hidden>
+        <p style="font-size:120px;color:orange;font-weight: bolder;"> {{products.avg_rating}}</p><input type="radio" name="rate" id="rate-5" value="5">
+        <label for="rate-5" class="fas fa-star"></label>
+        <input type="radio" name="rate" id="rate-4" value="4">
+        <label for="rate-4" class="fas fa-star"></label>
+        <input type="radio" name="rate" id="rate-3" value="3">
+        <label for="rate-3" class="fas fa-star"></label>
+        <input type="radio" name="rate" id="rate-2" value="2">
+        <label for="rate-2" class="fas fa-star"></label>
+        <input type="radio" name="rate" id="rate-1" value="1">
+        <label for="rate-1" class="fas fa-star"></label>
+          <header></header>
+          <div class="btn">
+            <button  style="width:220px;height:50px;" type="submit">Post your Rating</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script>
+      const btn = document.querySelector("button");
+      const post = document.querySelector(".post");
+      const widget = document.querySelector(".star-widget");
+      const editBtn = document.querySelector(".edit");
+      btn.onclick = ()=>{
+        widget.style.display = "none";
+        post.style.display = "block";
+        editBtn.onclick = ()=>{
+          widget.style.display = "block";
+          post.style.display = "none";
+        }
+        return false;
+      }
+    </script>
+
+<br><br><br><br>
+
+
+
+
+<!--                            ############################################################-->
+<!--                            -->
+
+
+
+
+                            <div class="product__details-comment ">
+
+                                <div class="col-xl-4">
+
+                                                                            <div class="comment-title mb-20">
+                                           <h3>Add a review</h3>
+
+                                        </div>
+
+                                </div>
+                                <form action="{% url 'review' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="text" name="prod_id" value="{{products.id}}" hidden>
+                                    <textarea name="reviews" id="" cols="110" rows="3"></textarea><br>
+                                    <button class="btn btn-primary" type="submit" style="width:100px;">submit</button>
+                                </form>
+                                <br><br>
+                                <h3>Reviews</h3><br>
+                                {% for rev in reviews %}
+                                {% if products.id == rev.prod_parent %}
+                                    <div class="card w-75 mb-3">
+                                        <div class="card-body">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                                                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                                                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                                            </svg>
+                                            {{ rev.name }}
+                                            <p class="card-text mt-12 w-75" style="width:900px;">{{ rev.review }}</p>
+
+
+                                            <!-- Display replies for this review -->
+
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                {% endfor %}
+
+
+                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- product-details-des-end -->
+
+{% endblock %}

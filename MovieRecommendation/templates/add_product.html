@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    .form-container {
+        max-width: 1800px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+
+    .form-container h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        font-weight: bold;
+    }
+
+    .form-field {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    .form-field:focus {
+        outline: none;
+        border-color: #007bff;
+    }
+
+    .form-errors {
+        color: red;
+    }
+
+    .form-submit {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .form-submit:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+<br><br><br><br>
+
+<div class="form-container">
+    <h2>Add a New Movie</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.media }}
+        <div class="form-group">
+            <label for="id_title" class="form-label">Title:</label>
+            {{ form.title }}
+            <div class="form-errors">
+                {{ form.title.errors }}
+            </div>
+        </div>
+<div class="form-group">
+    <label for="id_poster" class="form-label">Poster:</label>
+    {{ form.poster }}
+    <div class="form-errors">
+        {{ form.poster.errors }}
+    </div>
+</div>
+
+
+
+
+        <div class="form-group">
+            <label for="id_description" class="form-label">Description:</label>
+            {{ form.description }}
+            <div class="form-errors">
+                {{ form.description.errors }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="id_release_date" class="form-label">Release Date:</label>
+            {{ form.release_date }}
+            <div class="form-errors">
+                {{ form.release_date.errors }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="id_actors" class="form-label">Actors:</label>
+            {{ form.actors }}
+            <div class="form-errors">
+                {{ form.actors.errors }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="id_categories" class="form-label">Categories:</label>
+            {{ form.categories }}
+            <div class="form-errors">
+                {{ form.categories.errors }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="id_youtube" class="form-label">YouTube Link:</label>
+            {{ form.youtube }}
+            <div class="form-errors">
+                {{ form.youtube.errors }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="id_download" class="form-label">Download Link:</label>
+            {{ form.download }}
+            <div class="form-errors">
+                {{ form.download.errors }}
+            </div>
+        </div>
+                <div class="form-group">
+            <label for="id_tags" class="form-label">Search Tags:</label>
+            {{ form.tags }}
+            <div class="form-errors">
+                {{ form.tags.errors }}
+            </div>
+        </div>
+        <!-- Add styling for other fields in a similar manner -->
+        <div class="form-group">
+            <button type="submit" class="form-submit">Submit</button>
+        </div>
+    </form>
+</div>
+
+<br><br><br><br><br><br>
+
+{% endblock %}
