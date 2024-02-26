@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+admin panel
+
+
+
+
+
+<style>
+
+    #regibutton:disabled{
+    background-color:rgba(128, 128,128, 0.116);
+    }
+
+</style>
+
+        <!-- page-banner-area-start -->
+
+        <!-- page-banner-area-end -->
+
+        <!-- account-area-start -->
+        <div class="account-area mt-70 mb-70">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 mt-70 mb-70 ">
+                        <div class="basic-login mb-50">
+                            <h5>Category</h5>
+
+                            <form action="{% url 'cat_add' %}" method="post">
+                                {% csrf_token %}
+                                <label for="name">Category  <span>*</span></label>
+                                <input required id="name" name="cat_name" type="text" placeholder="Enter category">
+                                <label for="pass">slug <span>*</span></label>
+                                <input required id="pass" type="password" name="cat_slug" placeholder="Enter slug value ">
+
+                                    <button type="submit" id="regibutton" class="tp-in-btn w-40">submit</button>
+
+                            </form>
+                        </div>
+                    </div>
+                    <div>
+                        {% for cat in category %}
+
+                                    <div class="card w-75 mb-3">
+                                        <div class="card-body">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                                                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                                                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                                            </svg>
+                                            {{ cat.name }}
+                                             <a href="{% url 'cat_del' cat.id %}" class="button tp-in-btn w-40" style="margin-left:50px" >delete</a>
+
+
+                                            <!-- Display replies for this review -->
+
+                                        </div>
+                                    </div>
+
+                                {% endfor %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- account-area-end -->
+
+       
+{% endblock %}
+
+

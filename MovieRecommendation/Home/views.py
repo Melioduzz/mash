@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse, JsonResponse
 
 from .forms import EditUserProfileForm, ProductForm
-from .models import Banner_area, Category, Product, Review, Reply, Rating , Favorite
+from .models import Banner_area, Category, Product, Review, Reply, Rating, Favorite
 import json
 from django.template.loader import render_to_string
 from django.shortcuts import render, redirect, get_object_or_404
@@ -94,6 +94,7 @@ def product_details(request, id):
 
 from django.shortcuts import get_object_or_404
 
+
 def product_details_slug(request, slug):
     # Retrieve the product with the given slug or return a 404 error if not found
     product = get_object_or_404(Product, slug=slug)
@@ -118,7 +119,6 @@ def product_details_slug(request, slug):
 
     # Render the template with the context data
     return render(request, "product_details.html", context)
-
 
 
 def user_account(request):
@@ -175,9 +175,15 @@ def LogIn(request):
             user = authenticate(username=username, password=password)
 
         if user is not None:
-            login(request, user)
-            messages.success(request, "Successfully logged in ! ")
-            return redirect("home")
+            if user.is_staff:
+                login(request, user)
+                return render(request, 'admin_panel.html')
+            else:
+                login(request, user)
+                messages.success(request, "Successfully logged in ! ")
+                return redirect("home")
+
+
         else:
             # Authentication failed, handle error (e.g., display error message)
             error_message = "Invalid credentials, try again ..."
@@ -302,7 +308,7 @@ def favorites(request):
         user_id = request.user.id
         rev = request.POST.get("fav_id")
 
-        print(rev,user_id)
+        print(rev, user_id)
 
         # Check if a favorite entry already exists for this user and product combination
         existing_favorite = Favorite.objects.filter(user=user_id, product=rev).exists()
@@ -312,7 +318,6 @@ def favorites(request):
             fav.save()
             messages.success(request, "movie added to Favorites")
 
-
     return redirect(f"product_details/{rev}")
 
 
@@ -320,13 +325,15 @@ def fav_view(request):
     fav = Favorite.objects.all()
     products = Product.objects.all()
     context = {
-        "fav":fav,"products":products
+        "fav": fav, "products": products
     }
-    return render(request,"favorites.html",context)
+    return render(request, "favorites.html", context)
+
 
 # views.py
 from django.shortcuts import redirect, get_object_or_404
 from .models import Favorite
+
 
 def delete_favorite(request):
     if request.method == 'POST':
@@ -336,10 +343,6 @@ def delete_favorite(request):
         messages.success(request, " movie removed from favorites !")
         return redirect('fav_view')  # Redirect to the user's profile page or wherever you want
     return redirect(f"fav_view")
-
-
-
-
 
 
 def create_product(request):
@@ -352,19 +355,20 @@ def create_product(request):
                 product.creator = request.user.id
             product.save()
             form.save_m2m()
-            messages.success(request, " movie model created successfully ")# Save the many-to-many relationships
+            messages.success(request, " movie model created successfully ")  # Save the many-to-many relationships
             return redirect('my_product_view')  # Redirect to a success page
     else:
         form = ProductForm()
     return render(request, 'add_product.html', {'form': form})
 
-def my_product_view(request):
 
+def my_product_view(request):
     products = Product.objects.all()
     context = {
-        "products":products
+        "products": products
     }
-    return render(request,"my_product.html",context)
+    return render(request, "my_product.html", context)
+
 
 # views.py
 
@@ -378,4 +382,71 @@ def delete_product(request):
     return redirect(f"my_product_view")
 
 
+def delete_product_all(request):
+    if request.method == 'POST':
+        favorite_id = request.POST.get('fav_id')
+        favorite = Product.objects.get(id=favorite_id)
+        favorite.delete()
+        messages.success(request, "one movie deleted")
+        return redirect('all_product_view')  # Redirect to the user's profile page or wherever you want
+    return redirect(f"all_product_view")
+
+
+def cat_add(request):
+    cat = Category.objects.all()
+    if request.method == "POST":
+
+        cat_name = request.POST.get('cat_name')
+        cat_slug = request.POST.get('cat_slug')
+
+        category = Category(name=cat_name, slug=cat_slug)
+        if category:
+            category.save()
+    context = {
+        "category": cat,
+    }
+    return render(request, "add_category.html", context)
+
+
+def cat_del(request, id):
+    cat = Category.objects.all()
+
+    categories = Category.objects.get(id=id)
+    if categories:
+        categories.delete()
+        return redirect(f'cat_add')
+
+    context = {
+        "category": cat,
+    }
+    return render(request, "add_category.html", context)
+
+
+def all_product_view(request):
+    products = Product.objects.all()
+    context = {
+        "products": products
+    }
+    return render(request, "all_movie.html", context)
+
+
+def user_view(request):
+    users = User.objects.all().order_by("-id")
+    context ={
+        "users":users,
+    }
+    return render(request, "all_users.html", context)
+
+
+def user_delete(request,id):
+    usr = User.objects.get(id=id)
+    if usr:
+        usr.delete()
+        return redirect('user_view')
+
+    return redirect('user_view')
+
+
+def admin_home(request):
+    return render(request,"admin_panel.html")
 

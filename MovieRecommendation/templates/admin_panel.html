@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+
+
+
+
+<style>
+
+    #regibutton:disabled{
+    background-color:rgba(128, 128,128, 0.116);
+    }
+
+</style>
+
+        <!-- page-banner-area-start -->
+
+        <!-- page-banner-area-end -->
+
+        <!-- account-area-start -->
+        <div class="account-area mt-70 mb-70">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mt-90 mb-90 ">
+
+
+                            <a href="{% url 'cat_add' %}" class="button tp-in-btn w-40" style="margin-left:50px">category</a>
+                            <a href="{% url 'my_product_view' %}" class="button tp-in-btn w-40" style="margin-left:50px"> my movie</a>
+                            <a href="{% url 'all_product_view' %}" class="button tp-in-btn w-40" style="margin-left:50px"> all movie</a>
+                            <a href="{% url 'user_view' %}" class="button tp-in-btn w-40" style="margin-left:50px"> user</a>
+
+
+
+                </div>
+            </div>
+        </div>
+            <br><br><br><br><br><br>
+        <!-- account-area-end -->
+
+
+{% endblock %}
+
+
+
